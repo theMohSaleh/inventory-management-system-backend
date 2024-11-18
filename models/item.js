@@ -13,6 +13,7 @@ const itemSchema = mongoose.Schema({
     category: {
         type: String,
         required: true,
+        enum: ['Classroom Materials', 'Art Supplies', 'Sports Equipment', 'Music Instruments', 'Library Resources', 'Office Supplies'],
     },
     owner: {
         type: mongoose.Schema.Types.ObjectId,
