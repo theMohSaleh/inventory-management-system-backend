@@ -1,7 +1,7 @@
-const e = require('cors');
+const express = require('express');
+const verifyToken = require('../middleware/verify-token.js');
 const Item = require('../models/item.js')
-const express = require('express')
-router = express.Router();
+const router = express.Router();
 
 // GET - Index
 router.get('/', async (req, res) => {
@@ -21,9 +21,19 @@ router.get('/', async (req, res) => {
     }
 })
 
+// ========= Protected Routes =========
+router.use(verifyToken);
 // POST - Create
 router.post('/', async (req, res) => {
-
+    try {
+        req.body.owner = req.user._id;
+        const item = await Item.create(req.body);
+        item._doc.owner = req.user;
+        res.status(201).json(item);
+    }catch (error){
+        console.error(error);
+        res.status(500).json({ error: 'An error occurred while creating the item' });
+    }
 })
 
 // PUT - Update
@@ -48,5 +58,6 @@ router.delete('/', async (req, res) => {
         }
     }
 })
+
 
 module.exports = router
