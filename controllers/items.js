@@ -58,16 +58,30 @@ router.get('/:itemId', async (req, res) => {
 
 });
 
-
-
-
-
-
-
 // PUT - Update
-router.put('/', async (req, res) => {
+router.put('/:itemId', async (req, res) => {
+   try{
+    const item = await Item.findById(req.params.itemId);
+    if (!item) {
+        return res.status(404).send("Item not found.");
+      }
+    if (!item.owner.equals(req.user._id)) {
+        return res.status(403).send("You're not allowed to do that!");
+      }
 
-})
+    const updatedItem = await Item.findByIdAndUpdate(
+        req.params.itemId,
+        req.body,
+        { new: true, runValidators: true }
+    );
+    updatedItem._doc.owner = req.user;
+    res.status(200).json(updatedItem);
+
+   } catch(error){
+    console.error(error);
+    res.status(500).json({ error: error.message });
+   }
+});
 
 // DELETE - Remove
 router.delete('/', async (req, res) => {
