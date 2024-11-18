@@ -2,12 +2,7 @@ const express = require('express');
 const verifyToken = require('../middleware/verify-token.js');
 const Item = require('../models/item.js')
 const router = express.Router();
-// ========= Public Routes ===========
 
-
-
-// ========= Protected Routes =========
-router.use(verifyToken);
 // POST - Create
 router.post('/', async (req, res) => {
     try {
@@ -84,7 +79,7 @@ router.put('/:itemId', async (req, res) => {
 });
 
 // DELETE - Remove
-router.delete('/', async (req, res) => {
+router.delete('/:itemId', async (req, res) => {
     try {
         const deletedItem = await Item.findByIdAndDelete({ _id: req.params.itemId })
         if (!deletedItem) {
