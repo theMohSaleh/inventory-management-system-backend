@@ -14,12 +14,8 @@ const usersRouter = require('./controllers/users');
 const profilesRouter = require('./controllers/profiles');
 const itemsController = require('./controllers/items');
 const activityController = require('./controllers/activities');
-//hi im hessa 
-
-// sara
 
 // Middleware
-
 mongoose.connect(process.env.MONGODB_URI);
 
 mongoose.connection.on('connected', () => {
