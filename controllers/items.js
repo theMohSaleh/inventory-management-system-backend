@@ -1,6 +1,7 @@
 const express = require('express');
 const verifyToken = require('../middleware/verify-token.js');
-const Item = require('../models/item.js')
+const Item = require('../models/item.js');
+const Activity = require('../models/activity.js');
 const router = express.Router();
 
 // POST - Create
@@ -9,6 +10,7 @@ router.post('/', async (req, res) => {
         req.body.owner = req.user._id;
         const item = await Item.create(req.body);
         item._doc.owner = req.user;
+        // await Activity.create(`user ${req.user} has created item on new date`)
         res.status(201).json(item);
     }catch (error){
         console.error(error);
