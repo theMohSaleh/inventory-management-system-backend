@@ -17,7 +17,7 @@ const activityController = require('./controllers/activities');
 
 // Middleware
 mongoose.connect(process.env.MONGODB_URI);
-
+const PORT = process.env.PORT || '3000'
 mongoose.connection.on('connected', () => {
     console.log(`Connected to MongoDB ${mongoose.connection.name}.`);
 });
@@ -37,6 +37,6 @@ app.use(verifyToken);
 app.use('/items', itemsController)
 app.use('/logs', activityController)
 
-app.listen(3000, () => {
+app.listen(PORT, () => {
     console.log('The express app is ready!');
 });
