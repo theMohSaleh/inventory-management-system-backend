@@ -27,7 +27,7 @@ router.post('/', async (req, res) => {
 // GET - Index
 router.get('/', async (req, res) => {
     try {
-        const itemsFound = await Item.find();
+        const itemsFound = await Item.find().populate('owner');
         if (!itemsFound.length) {
             res.status(404);
             throw new Error('No items found');
@@ -45,7 +45,7 @@ router.get('/', async (req, res) => {
 // GET - Show one item by itemId
 router.get('/:itemId', async (req, res) => {  
     try {
-        const foundItem = await Item.findById(req.params.itemId);
+        const foundItem = await Item.findById(req.params.itemId).populate('owner');
         if (!foundItem) {
             res.status(404);
             throw new Error('Item not found.');
@@ -65,18 +65,18 @@ router.get('/:itemId', async (req, res) => {
 router.put('/:itemId', async (req, res) => {
     try {
         // Find the original item before update
-        const item = await Item.findById(req.params.itemId);
+        const item = await Item.findById(req.params.itemId).populate('owner');
         if (!item) {
             return res.status(404).send("Item not found.");
         }
-        if (!item.owner.equals(req.user._id)) {
+        if (!item.owner._id.equals(req.user._id)) {
             return res.status(403).send("You're not allowed to do that!");
         }
 
         // Track changes between original item and new values in req.body
         const changes = [];
         for (const key in req.body) {
-            if (item[key] !== undefined && item[key] !== req.body[key]) {
+            if (item[key] !== undefined && item[key] !== req.body[key] && key !== 'owner') {
                 changes.push(`${key} from "${item[key]}" to "${req.body[key]}"`);
             }
         }
@@ -120,7 +120,7 @@ router.put('/:itemId', async (req, res) => {
 // DELETE - Remove
 router.delete('/:itemId', async (req, res) => {
     try {
-        const deletedItem = await Item.findByIdAndDelete({ _id: req.params.itemId })
+        const deletedItem = await Item.findByIdAndDelete({ _id: req.params.itemId }).populate('owner');
         if (!deletedItem) {
             res.status(404)
             throw new Error('Item not found.')
