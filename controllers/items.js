@@ -76,7 +76,7 @@ router.put('/:itemId', async (req, res) => {
         // Track changes between original item and new values in req.body
         const changes = [];
         for (const key in req.body) {
-            if (item[key] !== undefined && item[key] !== req.body[key] && key !== 'owner') {
+            if (item[key] !== undefined && item[key] !== req.body[key] && key !== 'owner' && key !== '_id') {
                 changes.push(`${key} from "${item[key]}" to "${req.body[key]}"`);
             }
         }
