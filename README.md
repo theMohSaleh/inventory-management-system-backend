@@ -12,5 +12,4 @@ JWT_SECRET=[secret]
 ```
 
 **Front-end Repository:**
-You can view the front-end repo for more details [here!]([https://inventory-management-system-frontend-psi.vercel.app//](https://github.com/theMohSaleh/inventory-management-system-frontend)
-
+You can view the front-end repo for more details [here!](https://github.com/theMohSaleh/inventory-management-system-frontend) 
